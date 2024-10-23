@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Synthesizer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="shortcut icon" href="#">
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-4">
+                <label for="volume">Master Volume</label>
+                <input id="volume" type="range" min="0.0" max="1.0" step="0.1" value="0.5" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
+                <output>0.5</output>
+            </div>
+
+            <div class="col-12 d-flex justify-content-center">
+                <ul class="set">
+                    <li class="key white" id="key-1" data-key="c" data-range="4" data-color="white"></li>
+                    <li class="key black" id="key-2" data-key="db" data-range="4" data-color="black"></li>
+                    <li class="key white" id="key-3" data-key="d" data-range="4" data-color="white"></li>
+                    <li class="key black" id="key-4" data-key="eb" data-range="4" data-color="black"></li>
+                    <li class="key white" id="key-5" data-key="e" data-range="4" data-color="white"></li>
+                    <li class="key white" id="key-6" data-key="f" data-range="4" data-color="white"></li>
+                    <li class="key black" id="key-7" data-key="gb" data-range="4" data-color="black"></li>
+                    <li class="key white" id="key-8" data-key="g" data-range="4" data-color="white"></li>
+                    <li class="key black" id="key-9" data-key="ab" data-range="4" data-color="black"></li>
+                    <li class="key white" id="key-10" data-key="a" data-range="4" data-color="white"></li>
+                    <li class="key black" id="key-11" data-key="bb" data-range="4" data-color="black"></li>
+                    <li class="key white" id="key-12" data-key="b" data-range="4" data-color="white"></li>
+                    <li class="key white" id="key-13" data-key="c" data-range="5" data-color="white"></li>
+                    <li class="key black" id="key-14" data-key="db" data-range="5" data-color="black"></li>
+                    <li class="key white" id="key-15" data-key="d" data-range="5" data-color="white"></li>
+                    <li class="key black" id="key-16" data-key="eb" data-range="5" data-color="black"></li>
+                    <li class="key white" id="key-17" data-key="e" data-range="5" data-color="white"></li>
+                    <li class="key white" id="key-18" data-key="f" data-range="5" data-color="white"></li>
+                    <li class="key black" id="key-19" data-key="gb" data-range="5" data-color="black"></li>
+                    <li class="key white" id="key-20" data-key="g" data-range="5" data-color="white"></li>
+                    <li class="key black" id="key-21" data-key="ab" data-range="5" data-color="black"></li>
+                    <li class="key white" id="key-22" data-key="a" data-range="5" data-color="white"></li>
+                    <li class="key black" id="key-23" data-key="bb" data-range="5" data-color="black"></li>
+                    <li class="key white" id="key-24" data-key="b" data-range="5" data-color="white"></li>
+                    <li class="key white" id="key-25" data-key="c" data-range="6" data-color="white"></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/synthesizer.js"></script>
+    <script src="js/oscillator.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
+
