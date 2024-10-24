@@ -2,6 +2,30 @@
 class Synthesizer {
 
     #noteFrequencies = {
+        c2: 65.41,
+        db2: 69.30,
+        d2: 73.42,
+        eb2: 77.78,
+        e2: 82.41,
+        f2: 87.31,
+        gb2: 92.50,
+        g2: 98.0,
+        ab2: 103.83,
+        a2: 110.0,
+        bb2: 116.54,
+        b2: 123.47,
+        c3: 130.81,
+        db3: 138.59,
+        d3: 146.83,
+        eb3: 155.56,
+        e3: 164.81,
+        f3: 174.61,
+        gb3: 185.0,
+        g3: 196.0,
+        ab3: 207.65,
+        a3: 220.0,
+        bb3: 233.08,
+        b3: 246.94,
         c4: 261.63,
         db4: 277.18,
         d4: 293.66,
@@ -72,5 +96,9 @@ class Synthesizer {
 
     setPlayedNote(note) {
         this.#playedNote = note;
+    }
+
+    setVolume(volume) {
+        this.#parameters.volume = volume;
     }
 }

@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.key').forEach((key) => {
         key.addEventListener('mousedown', (e) => {
             //console.log('key pressed: ' + e.target.dataset.key + ' range: ' + e.target.dataset.range);
-            synthesizer.setPlayedNote(e.target.dataset.key + e.target.dataset.range);
+            synthesizer.setPlayedNote(e.target.dataset.key + e.target.dataset.octave);
             synthesizer.press();
         });
 
@@ -46,13 +46,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Check for PC keyboard inputs.
+
     let released = true;
 
     document.addEventListener('keydown', (e) => {
+        // Filter the pressed keys.
         if (keys.includes(e.key) && released) {
+            // Get the corresponding HTML key element.
             const key = document.getElementById(keyMaps[e.key]);
-            const note = key.dataset.key + key.dataset.range;
+            // Get the note data from the key element.
+            const note = key.dataset.key + key.dataset.octave;
             synthesizer.setPlayedNote(note);
+            // Play the note.
             synthesizer.press();
 
             key.classList.add('pressed-' + key.dataset.color);
@@ -61,11 +67,50 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.addEventListener('keyup', (e) => {
+        // Filter the pressed keys.
         if (keys.includes(e.key)) {
             synthesizer.release();
+            // Get the corresponding HTML key element.
             const key = document.getElementById(keyMaps[e.key]);
             key.classList.remove('pressed-' + key.dataset.color);
             released = true;
         }
     });
+
+    // Check for volume.
+    document.getElementById('volume').addEventListener('input', (e) => {
+        synthesizer.setVolume(e.target.value);
+    });
+
+    // Check for range keyboard.
+    document.querySelectorAll('[id^="range-"]').forEach((range) => {
+        range.addEventListener('click', (e) => {
+            setRange(e.target.dataset.lowestOctave);
+        });
+    });
 });
+
+
+/*
+ * Reset the octave values on the virtual keyboard.
+ */
+function setRange(octave) {
+    let counter = 0;
+    const nbNotesInOctave = 12;
+
+    document.querySelectorAll('[id^="key-"]').forEach((key) => {
+        // Check if the number of notes contained in an octave is exceeded.
+        if (counter == nbNotesInOctave) {
+            // Increase octave value.
+            octave++;
+            // Reset counter.
+            counter = 0;
+        }
+
+        key.dataset.octave = octave;
+
+        counter++;
+    });
+}
+
+

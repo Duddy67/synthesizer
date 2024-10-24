@@ -37,7 +37,7 @@ class Oscillator {
 
     play(frequency, parameters) {
         const master = this.#getMaster(parameters.volume);
-
+//console.log(parameters.volume);
         this.#oscillator = this.#getOscillator(frequency);
         this.#vca = this.#audioContext.createGain();
         this.#oscillator.connect(this.#vca);
@@ -46,19 +46,14 @@ class Oscillator {
         this.#vca.gain.linearRampToValueAtTime(0.5, this.#audioContext.currentTime + 0.2);
         this.#vca.gain.linearRampToValueAtTime(0.0001, this.#audioContext.currentTime + 0.5);
 
-        //this.#vca = this.#audioContext.createGain();
-        //this.#vca.connect(this.#audioContext.destination);
-        //gainNode.gain.setValueAtTime(0, this.#audioContext.currentTime);
-//console.log(this.#audioContext.currentTime + 0.2);
         // Play sound.
-        //this.#vca.gain.exponentialRampToValueAtTime(1, this.#audioContext.currentTime + 0.2);
         this.#oscillator.start();
+
         // Stop sound after note length.
         this.#oscillator.stop(this.#audioContext.currentTime + this.#noteLength);
     }
 
     stop() {
         this.#oscillator.stop(this.#audioContext.currentTime + this.#noteLength);
-        //this.#vca.gain.exponentialRampToValueAtTime(0.0001, this.#audioContext.currentTime + 0.5);
     }
 }
