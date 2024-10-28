@@ -88,6 +88,28 @@ document.addEventListener('DOMContentLoaded', () => {
             setRange(e.target.dataset.lowestOctave);
         });
     });
+
+    // Check for doubled note.
+    document.querySelectorAll('input[name="doubled"]').forEach((doubled) => {
+        doubled.addEventListener('click', (e) => {
+            synthesizer.setDoubled(e.target.value);
+        });
+    });
+
+    // Check for steps.
+    document.getElementById('steps').addEventListener('input', (e) => {
+        synthesizer.setSteps(e.target.value);
+    });
+
+    // Check for delay.
+    document.getElementById('delay').addEventListener('input', (e) => {
+        synthesizer.setDelay(e.target.value);
+    });
+
+    // Check for delay feedback.
+    document.getElementById('feedback').addEventListener('input', (e) => {
+        synthesizer.setFeedback(e.target.value);
+    });
 });
 
 

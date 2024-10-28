@@ -60,7 +60,7 @@ class Synthesizer {
     #unlocked = false;
     #playedNote;
     // The sound parameters.
-    #parameters = {volume: 0.1, delay: 0, feedback: 0};
+    #parameters = {volume: 0.1, delay: 0, feedback: 0, doubled: true, steps: 7};
     
     constructor(oscillator) {
         this.#oscillator = oscillator;
@@ -91,7 +91,7 @@ class Synthesizer {
     }
 
     release() {
-        this.#oscillator.stop();
+        this.#oscillator.stop(this.#parameters);
     }
 
     setPlayedNote(note) {
@@ -100,5 +100,21 @@ class Synthesizer {
 
     setVolume(volume) {
         this.#parameters.volume = volume;
+    }
+
+    setDelay(delay) {
+        this.#parameters.delay= delay;
+    }
+
+    setFeedback(feedback) {
+        this.#parameters.feedback = feedback;
+    }
+
+    setDoubled(value) {
+        this.#parameters.doubled = value == 1 ? true : false;
+    }
+
+    setSteps(steps) {
+        this.#parameters.steps = steps;
     }
 }

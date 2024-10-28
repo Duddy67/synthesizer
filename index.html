@@ -13,19 +13,37 @@
 <body>
     <div class="container">
         <div class="row">
-            <div class="col-4">
+            <div class="col-3">
                 <label for="volume">Master Volume</label>
                 <input id="volume" type="range" min="0.0" max="1.0" step="0.1" value="0.5" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
-                <output>0.5</output>
-            </div>
-
-            <div class="col-4">
-                <label for="range-1" class="form-check-label">Range 1</label>
+                <output class="d-block">0.5</output>
+                <label for="range-1" class="form-check-label mt-3">Range 1</label>
                 <input type="radio" name="range" value="1" data-lowest-octave="2" class="form-check-input" id="range-1">
                 <label for="range-2" class="form-check-label">Range 2</label>
                 <input type="radio" name="range" value="2" data-lowest-octave="3" class="form-check-input" id="range-2" checked>
                 <label for="range-3" class="form-check-label">Range 3</label>
                 <input type="radio" name="range" value="3" data-lowest-octave="4" class="form-check-input" id="range-3">
+            </div>
+
+            <div class="col-3">
+                <label class="d-block">Doubled note</label>
+                <label for="doubled" class="form-check-label">Yes</label>
+                <input type="radio" name="doubled" value="1" class="form-check-input me-4" checked>
+                <label for="doubled" class="form-check-label">No</label>
+                <input type="radio" name="doubled" value="0" class="form-check-input"><br />
+
+                <label for="steps" class="mt-3">Steps</label>
+                <input id="steps" type="range" min="1" max="12" step="1" value="7" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
+                <output class="d-block">7</output>
+            </div>
+
+            <div class="col-3">
+                <label for="delay">Delay</label>
+                <input id="delay" type="range" min="0.0" max="1.0" step="0.1" value="0" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
+                <output>0</output><br />
+                <label for="feedback">Feedback</label>
+                <input id="feedback" type="range" min="0.0" max="1.0" step="0.1" value="0" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
+                <output>0</output>
             </div>
 
             <div class="col-12 d-flex justify-content-center">
