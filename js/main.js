@@ -33,15 +33,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const oscillator = new Oscillator();
     const synthesizer = new Synthesizer(oscillator);
 
+    // Check for synthesizer keys.
     document.querySelectorAll('.key').forEach((key) => {
         key.addEventListener('mousedown', (e) => {
-            //console.log('key pressed: ' + e.target.dataset.key + ' range: ' + e.target.dataset.range);
-            synthesizer.setPlayedNote(e.target.dataset.key + e.target.dataset.octave);
+            synthesizer.setPressedKey(e.target.dataset.key + e.target.dataset.octave);
             synthesizer.press();
         });
 
         key.addEventListener('mouseup', (e) => {
-            //console.log('key released: ' + e.target.dataset.key + ' range: ' + e.target.dataset.range);
             synthesizer.release();
         });
     });
@@ -54,14 +53,14 @@ document.addEventListener('DOMContentLoaded', () => {
         // Filter the pressed keys.
         if (keys.includes(e.key) && released) {
             // Get the corresponding HTML key element.
-            const key = document.getElementById(keyMaps[e.key]);
-            // Get the note data from the key element.
-            const note = key.dataset.key + key.dataset.octave;
-            synthesizer.setPlayedNote(note);
+            const keyElement = document.getElementById(keyMaps[e.key]);
+            // Get the key data from the key element.
+            const key = keyElement.dataset.key + keyElement.dataset.octave;
+            synthesizer.setPressedKey(key);
             // Play the note.
             synthesizer.press();
 
-            key.classList.add('pressed-' + key.dataset.color);
+            keyElement.classList.add('pressed-' + keyElement.dataset.color);
             released = false;
         }
     });
@@ -96,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Check for steps.
+    // Check for the "steps" parameter used with doubled notes.
     document.getElementById('steps').addEventListener('input', (e) => {
         synthesizer.setSteps(e.target.value);
     });

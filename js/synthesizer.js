@@ -55,18 +55,17 @@ class Synthesizer {
 
     // The Web Audio Context.
     #audioContext = null;
+    // The Oscillator object.
     #oscillator;
     // Used by iOS devices.
     #unlocked = false;
-    #playedNote;
+    #pressedKey;
     // The sound parameters.
     #parameters = {volume: 0.1, delay: 0, feedback: 0, doubled: true, steps: 7};
     
     constructor(oscillator) {
         this.#oscillator = oscillator;
     }
-
-
 
     press() {
         // Create an audio context if it doesn't exist.
@@ -86,7 +85,9 @@ class Synthesizer {
             this.#unlocked = true;
         }
 
-        const frequency = this.#noteFrequencies[this.#playedNote];
+        // Get the the frequency (the note) corresponding to the pressed key.
+        const frequency = this.#noteFrequencies[this.#pressedKey];
+        // Play the note.
         this.#oscillator.play(frequency, this.#parameters);
     }
 
@@ -94,8 +95,8 @@ class Synthesizer {
         this.#oscillator.stop(this.#parameters);
     }
 
-    setPlayedNote(note) {
-        this.#playedNote = note;
+    setPressedKey(key) {
+        this.#pressedKey = key;
     }
 
     setVolume(volume) {

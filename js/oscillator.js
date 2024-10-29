@@ -3,19 +3,18 @@ class Oscillator {
 
     // The Web Audio Context.
     #audioContext = null;
-    #oscillator;
     // Default sound duration.
     #noteLength = 5;
-    #vca;
-    #vca2;
+    // Oscillator and gain elements needed to create the synthesizer sound.
+    #vco1; // Note: vco => Voltage Controlled Oscillator
     #vco2;
+    #vca1; // Note: vca => Voltage Controlled Amplifier
+    #vca2;
+    // The general volume.
     #master;
-
-
 
     #setMaster(volume) {
         this.#master = this.#audioContext.createGain();
-
         // Set volume (default 0.5).
         volume = volume !== undefined ? volume : 0.5;
         this.#master.gain.value = volume;
@@ -33,28 +32,33 @@ class Oscillator {
     }
 
     /*
-     * Create a second vco that is played with the main vco.
-     * Its frequency is transpose from the main vco frequency.
+     * Create a second oscillator that is played with the main oscillator.
+     * Its frequency is transposed from the main oscillator frequency.
      */
-    #doubleNote(frequency, steps) {
+    #doubledNote(frequency, steps) {
         this.#vco2 = this.#getOscillator();
         this.#vca2 = this.#audioContext.createGain();
 
         // Transpose the value of the main vco by x steps.
         this.#vco2.frequency.value = frequency * Math.pow(2, steps / 12);
         this.#vco2.connect(this.#vca2);
-        this.#vca2.connect(this.#vca);
+        this.#vca2.connect(this.#vca1);
     }
 
+    /*
+     * Add a delay effect to the sound.
+     */
     #delay(time, feedbackValue) {
         const delay =  this.#audioContext.createDelay();
-        this.#oscillator.connect(delay);
         delay.delayTime.value = time;
+
         const feedback = this.#audioContext.createGain();
         feedback.gain.value = feedbackValue;
         feedback.connect(delay);
+
         delay.connect(feedback);
-        delay.connect(this.#vca);
+        this.#vca1.connect(delay);
+        delay.connect(this.#master);
     }
 
     setAudioContext(audioContext) {
@@ -63,26 +67,28 @@ class Oscillator {
 
     play(frequency, parameters) {
         this.#setMaster(parameters.volume);
-        this.#oscillator = this.#getOscillator(frequency);
-        this.#vca = this.#audioContext.createGain();
-        this.#oscillator.connect(this.#vca);
-        //this.#vca.gain.setValueAtTime(0.01, this.#audioContext.currentTime);
-        this.#vca.connect(this.#master);
+        this.#vco1 = this.#getOscillator(frequency);
+        this.#vca1 = this.#audioContext.createGain();
+        this.#vco1.connect(this.#vca1);
+        // TODO: Some examples use the setValueAtTime method. Figure out why.
+        //this.#vca1.gain.setValueAtTime(0.01, this.#audioContext.currentTime);
+        this.#vca1.connect(this.#master);
 
+        // Check for doubled note.
         if (parameters.doubled) {
-            this.#doubleNote(frequency, parameters.steps);
+            this.#doubledNote(frequency, parameters.steps);
         }
 
-        this.#vca.gain.linearRampToValueAtTime(0.5, this.#audioContext.currentTime + 0.2);
-        this.#vca.gain.linearRampToValueAtTime(0.0001, this.#audioContext.currentTime + 0.5);
+        this.#vca1.gain.linearRampToValueAtTime(0.5, this.#audioContext.currentTime + 0.2);
+        this.#vca1.gain.linearRampToValueAtTime(0.0001, this.#audioContext.currentTime + 0.5);
 
-        //this.#delay(parameters.delay, parameters.feedback);
+        this.#delay(parameters.delay, parameters.feedback);
 
         // Play sound.
-        this.#oscillator.start();
+        this.#vco1.start();
 
         // Stop sound after note length.
-        this.#oscillator.stop(this.#audioContext.currentTime + this.#noteLength);
+        this.#vco1.stop(this.#audioContext.currentTime + this.#noteLength);
 
         if (parameters.doubled) {
             this.#vco2.start();
@@ -91,7 +97,7 @@ class Oscillator {
     }
 
     stop(parameters) {
-        this.#oscillator.stop(this.#audioContext.currentTime + this.#noteLength);
+        this.#vco1.stop(this.#audioContext.currentTime + this.#noteLength);
 
         if (parameters.doubled) {
             this.#vco2.stop(this.#audioContext.currentTime + this.#noteLength);
