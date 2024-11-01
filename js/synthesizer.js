@@ -61,7 +61,7 @@ class Synthesizer {
     #unlocked = false;
     #pressedKey;
     // The sound parameters.
-    #parameters = {volume: 0.1, delay: 0, feedback: 0, doubled: true, steps: 7};
+    #parameters = {volume: 0.1, delay: 0, feedback: 0, vco2: true, steps: 7};
     
     constructor(oscillator) {
         this.#oscillator = oscillator;
@@ -111,8 +111,8 @@ class Synthesizer {
         this.#parameters.feedback = feedback;
     }
 
-    setDoubled(value) {
-        this.#parameters.doubled = value == 1 ? true : false;
+    setVCO2(value) {
+        this.#parameters.vco2 = value == 1 ? true : false;
     }
 
     setSteps(steps) {

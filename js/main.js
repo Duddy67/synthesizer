@@ -88,10 +88,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Check for doubled note.
-    document.querySelectorAll('input[name="doubled"]').forEach((doubled) => {
-        doubled.addEventListener('click', (e) => {
-            synthesizer.setDoubled(e.target.value);
+    // Check for VCO 2.
+    document.querySelectorAll('input[name="vco-2"]').forEach((vco2) => {
+        vco2.addEventListener('click', (e) => {
+            synthesizer.setVCO2(e.target.value);
         });
     });
 

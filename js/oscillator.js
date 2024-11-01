@@ -35,7 +35,7 @@ class Oscillator {
      * Create a second oscillator that is played with the main oscillator.
      * Its frequency is transposed from the main oscillator frequency.
      */
-    #doubledNote(frequency, steps) {
+    #setVCO2(frequency, steps) {
         this.#vco2 = this.#getOscillator();
         this.#vca2 = this.#audioContext.createGain();
 
@@ -74,9 +74,9 @@ class Oscillator {
         //this.#vca1.gain.setValueAtTime(0.01, this.#audioContext.currentTime);
         this.#vca1.connect(this.#master);
 
-        // Check for doubled note.
-        if (parameters.doubled) {
-            this.#doubledNote(frequency, parameters.steps);
+        // Check for VCO 2.
+        if (parameters.vco2) {
+            this.#setVCO2(frequency, parameters.steps);
         }
 
         this.#vca1.gain.linearRampToValueAtTime(0.5, this.#audioContext.currentTime + 0.2);
@@ -90,7 +90,7 @@ class Oscillator {
         // Stop sound after note length.
         this.#vco1.stop(this.#audioContext.currentTime + this.#noteLength);
 
-        if (parameters.doubled) {
+        if (parameters.vco2) {
             this.#vco2.start();
             this.#vco2.stop(this.#audioContext.currentTime + this.#noteLength);
         }
@@ -99,7 +99,7 @@ class Oscillator {
     stop(parameters) {
         this.#vco1.stop(this.#audioContext.currentTime + this.#noteLength);
 
-        if (parameters.doubled) {
+        if (parameters.vco2) {
             this.#vco2.stop(this.#audioContext.currentTime + this.#noteLength);
         }
     }
