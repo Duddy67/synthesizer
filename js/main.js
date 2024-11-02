@@ -88,6 +88,38 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Check for delay.
+    document.getElementById('delay').addEventListener('input', (e) => {
+        synthesizer.setDelay(e.target.value);
+    });
+
+    // Check for delay feedback.
+    document.getElementById('feedback').addEventListener('input', (e) => {
+        synthesizer.setFeedback(e.target.value);
+    });
+
+    // Check for vco types.
+    document.querySelectorAll('[id$="-type"]').forEach((type) => {
+        type.addEventListener('change', (e) => {
+            synthesizer.setVcoType('vco' + e.target.dataset.vcoId, e.target.value);
+        });
+    });
+
+    // Check for vco attacks.
+    document.querySelectorAll('[id$="-attack"]').forEach((attack) => {
+        attack.addEventListener('input', (e) => {
+            synthesizer.setVcoAttack('vco' + e.target.dataset.vcoId, e.target.value);
+        });
+    });
+
+    // Check for vco releases.
+    document.querySelectorAll('[id$="-release"]').forEach((release) => {
+        release.addEventListener('input', (e) => {
+            //console.log('vco' + e.target.dataset.vcoId + ' type ' + e.target.value);
+            synthesizer.setVcoRelease('vco' + e.target.dataset.vcoId, e.target.value);
+        });
+    });
+
     // Check for VCO 2.
     document.querySelectorAll('input[name="vco-2"]').forEach((vco2) => {
         vco2.addEventListener('click', (e) => {
@@ -98,16 +130,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Check for the "steps" parameter used with doubled notes.
     document.getElementById('steps').addEventListener('input', (e) => {
         synthesizer.setSteps(e.target.value);
-    });
-
-    // Check for delay.
-    document.getElementById('delay').addEventListener('input', (e) => {
-        synthesizer.setDelay(e.target.value);
-    });
-
-    // Check for delay feedback.
-    document.getElementById('feedback').addEventListener('input', (e) => {
-        synthesizer.setFeedback(e.target.value);
     });
 });
 

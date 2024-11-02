@@ -35,7 +35,7 @@ class Oscillator {
      * Create a second oscillator that is played with the main oscillator.
      * Its frequency is transposed from the main oscillator frequency.
      */
-    #setVCO2(frequency, steps) {
+    #setVco2(frequency, steps) {
         this.#vco2 = this.#getOscillator();
         this.#vca2 = this.#audioContext.createGain();
 
@@ -43,6 +43,11 @@ class Oscillator {
         this.#vco2.frequency.value = frequency * Math.pow(2, steps / 12);
         this.#vco2.connect(this.#vca2);
         this.#vca2.connect(this.#vca1);
+    }
+
+    #setVco1(frequency, parameters) {
+        this.#vco1 = this.#getOscillator(frequency);
+        this.#vco1.type = parameters.vco1.type;
     }
 
     /*
@@ -67,20 +72,22 @@ class Oscillator {
 
     play(frequency, parameters) {
         this.#setMaster(parameters.volume);
-        this.#vco1 = this.#getOscillator(frequency);
+        this.#setVco1(frequency, parameters);
         this.#vca1 = this.#audioContext.createGain();
         this.#vco1.connect(this.#vca1);
         // TODO: Some examples use the setValueAtTime method. Figure out why.
-        //this.#vca1.gain.setValueAtTime(0.01, this.#audioContext.currentTime);
+        this.#vca1.gain.setValueAtTime(0, this.#audioContext.currentTime);
         this.#vca1.connect(this.#master);
 
         // Check for VCO 2.
         if (parameters.vco2) {
-            this.#setVCO2(frequency, parameters.steps);
+            this.#setVco2(frequency, parameters.steps);
         }
 
-        this.#vca1.gain.linearRampToValueAtTime(0.5, this.#audioContext.currentTime + 0.2);
-        this.#vca1.gain.linearRampToValueAtTime(0.0001, this.#audioContext.currentTime + 0.5);
+        // Attack
+        this.#vca1.gain.linearRampToValueAtTime(0.8, this.#audioContext.currentTime + parseFloat(parameters.vco1.attack));
+        // Decay
+        this.#vca1.gain.linearRampToValueAtTime(0.1, this.#audioContext.currentTime + 1);
 
         this.#delay(parameters.delay, parameters.feedback);
 
@@ -88,7 +95,7 @@ class Oscillator {
         this.#vco1.start();
 
         // Stop sound after note length.
-        this.#vco1.stop(this.#audioContext.currentTime + this.#noteLength);
+        //this.#vco1.stop(this.#audioContext.currentTime + this.#noteLength);
 
         if (parameters.vco2) {
             this.#vco2.start();
@@ -97,10 +104,11 @@ class Oscillator {
     }
 
     stop(parameters) {
-        this.#vco1.stop(this.#audioContext.currentTime + this.#noteLength);
+        this.#vca1.gain.linearRampToValueAtTime(0.0001, this.#audioContext.currentTime + parseFloat(parameters.vco1.release));
+        this.#vco1.stop(this.#audioContext.currentTime + parseFloat(parameters.vco1.release));
 
         if (parameters.vco2) {
-            this.#vco2.stop(this.#audioContext.currentTime + this.#noteLength);
+            this.#vco2.stop(this.#audioContext.currentTime);
         }
     }
 }
