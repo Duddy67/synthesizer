@@ -16,8 +16,8 @@
         <div class="row">
             <div class="col-3 border rounded me-2">
                 <label for="volume">Master Volume</label>
-                <input id="volume" type="range" min="0.0" max="1.0" step="0.1" value="0.5" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
-                <output class="d-block">0.5</output>
+                <input id="volume" type="range" min="0.0" max="1.0" step="0.1" value="0.2" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
+                <output class="d-block">0.2</output>
                 <label for="range-1" class="form-check-label mt-3">Range 1</label>
                 <input type="radio" name="range" value="1" data-lowest-octave="2" class="form-check-input" id="range-1">
                 <label for="range-2" class="form-check-label">Range 2</label>
@@ -37,11 +37,15 @@
                 </select>
 
                 <label for="vco-1-volume" class="mt-3">Volume</label>
-                <input id="vco-1-volume" type="range" min="0.0" max="1.0" step="0.1" value="0.5" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
+                <input id="vco-1-volume" type="range" min="0.0" max="1.0" step="0.1" value="0.5" data-vco-id="1" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
                 <output class="d-block">0.5</output>
 
                 <label for="vco-1-attack" class="mt-3">Attack</label>
                 <input id="vco-1-attack" type="range" min="0.0" max="1.0" step="0.1" value="0.0" data-vco-id="1" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
+                <output class="d-block">0.0</output>
+
+                <label for="vco-1-decay" class="mt-3">Decay</label>
+                <input id="vco-1-decay" type="range" min="0.0" max="1.0" step="0.1" value="0.0" data-vco-id="1" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
                 <output class="d-block">0.0</output>
 
                 <label for="vco-1-release" class="mt-3">Release</label>

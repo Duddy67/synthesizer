@@ -61,7 +61,7 @@ class Synthesizer {
     #unlocked = false;
     #pressedKey;
     // The sound parameters.
-    #parameters = {volume: 0.1, delay: 0, feedback: 0, vco1: {type: 'sine', attack: 0.0, decay: 0.0, release: 0.0}, vco2: true, steps: 7};
+    #parameters = {volume: 0.2, delay: 0, feedback: 0, vco1: {type: 'sine', volume: 0.5, attack: 0.0, decay: 0.0, release: 0.0}, vco2: true, steps: 7};
     
     constructor(oscillator) {
         this.#oscillator = oscillator;
@@ -113,6 +113,10 @@ class Synthesizer {
 
     setVcoType(vco, type) {
         this.#parameters[vco].type = type;
+    }
+
+    setVcoVolume(vco, volume) {
+        this.#parameters[vco].volume = volume;
     }
 
     setVcoAttack(vco, attack) {

@@ -105,10 +105,24 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Check for vco volumes.
+    document.querySelectorAll('[id$="-volume"]').forEach((volume) => {
+        volume.addEventListener('input', (e) => {
+            synthesizer.setVcoVolume('vco' + e.target.dataset.vcoId, e.target.value);
+        });
+    });
+
     // Check for vco attacks.
     document.querySelectorAll('[id$="-attack"]').forEach((attack) => {
         attack.addEventListener('input', (e) => {
             synthesizer.setVcoAttack('vco' + e.target.dataset.vcoId, e.target.value);
+        });
+    });
+
+    // Check for vco decays.
+    document.querySelectorAll('[id$="-decay"]').forEach((decay) => {
+        decay.addEventListener('input', (e) => {
+            synthesizer.setVcoDecay('vco' + e.target.dataset.vcoId, e.target.value);
         });
     });
 
