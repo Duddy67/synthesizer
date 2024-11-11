@@ -12,7 +12,7 @@
 
 <body>
     <div class="container">
-        <h1 class="mb-2">Synthetizer</h1>
+        <h1 class="mb-2">Synthesizer</h1>
         <div class="row">
             <div class="col-3 border rounded me-2">
                 <label for="volume">Master Volume</label>
@@ -47,6 +47,10 @@
                 <label for="vco-1-decay" class="mt-3">Decay</label>
                 <input id="vco-1-decay" type="range" min="0.0" max="1.0" step="0.1" value="0.0" data-vco-id="1" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
                 <output class="d-block">0.0</output>
+
+                <label for="vco-1-sustain" class="mt-3">Sustain</label>
+                <input id="vco-1-sustain" type="range" min="0.0" max="1" step="0.1" value="0.5" data-vco-id="1" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
+                <output class="d-block">0.5</output>
 
                 <label for="vco-1-release" class="mt-3">Release</label>
                 <input id="vco-1-release" type="range" min="0.0" max="1.0" step="0.1" value="0.0" data-vco-id="1" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">

@@ -126,6 +126,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Check for vco sustains.
+    document.querySelectorAll('[id$="-sustain"]').forEach((sustain) => {
+        sustain.addEventListener('input', (e) => {
+            synthesizer.setVcoSustain('vco' + e.target.dataset.vcoId, e.target.value);
+        });
+    });
+
     // Check for vco releases.
     document.querySelectorAll('[id$="-release"]').forEach((release) => {
         release.addEventListener('input', (e) => {

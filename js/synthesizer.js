@@ -61,7 +61,8 @@ class Synthesizer {
     #unlocked = false;
     #pressedKey;
     // The sound parameters.
-    #parameters = {volume: 0.2, delay: 0, feedback: 0, vco1: {type: 'sine', volume: 0.5, attack: 0.0, decay: 0.0, release: 0.0}, vco2: true, steps: 7};
+    #parameters = {volume: 0.2, delay: 0, feedback: 0, vco1: {type: 'sine', volume: 0.5, attack: 0.0, decay: 0.0, sustain: 0.25, sustainStep: 0.5, release: 0.0}, vco2: false, steps: 7};
+    #maxSustainVolume = 1;
     
     constructor(oscillator) {
         this.#oscillator = oscillator;
@@ -116,6 +117,9 @@ class Synthesizer {
     }
 
     setVcoVolume(vco, volume) {
+        // Adjust the sustain value according to the current vco volume.
+        this.#parameters[vco].sustain = volume / (this.#maxSustainVolume / this.#parameters[vco].sustainStep);
+        // Set the new volume value.
         this.#parameters[vco].volume = volume;
     }
 
@@ -123,12 +127,21 @@ class Synthesizer {
         this.#parameters[vco].attack = attack;
     }
 
-    setVcoRelease(vco, release) {
-        this.#parameters[vco].release = release;
-    }
-
     setVcoDecay(vco, decay) {
         this.#parameters[vco].decay = decay;
+    }
+
+    setVcoSustain(vco, sustain) {
+        // Store the actual value coming from the input HTML tag. 
+        this.#parameters[vco].sustainStep = sustain;
+        // Adjust the sustain value according to the current vco volume.
+        sustain = this.#parameters[vco].volume / (this.#maxSustainVolume / sustain);
+        // Set the new sustain value.
+        this.#parameters[vco].sustain = sustain;
+    }
+
+    setVcoRelease(vco, release) {
+        this.#parameters[vco].release = release;
     }
 
     setVCO2(value) {

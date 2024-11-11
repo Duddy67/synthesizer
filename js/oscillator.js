@@ -95,7 +95,7 @@ class Oscillator {
         // Attack
         this.#vca1.gain.linearRampToValueAtTime(parseFloat(parameters.vco1.volume), this.#audioContext.currentTime + parseFloat(parameters.vco1.attack));
         // Decay
-        //this.#vca1.gain.linearRampToValueAtTime(0.1, this.#audioContext.currentTime + parseFloat(parameters.vco1.attack) + parseFloat(parameters.vco1.decay));
+        this.#vca1.gain.linearRampToValueAtTime(parseFloat(parameters.vco1.sustain), this.#audioContext.currentTime + parseFloat(parameters.vco1.attack) + parseFloat(parameters.vco1.decay));
 
         this.#delay(parameters.delay, parameters.feedback);
 
