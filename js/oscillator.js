@@ -1,17 +1,14 @@
 
 class Oscillator {
-
     // The Web Audio Context.
     #audioContext = null;
     // Default sound duration.
     #noteLength = 5;
-    // Oscillator and gain elements needed to create the synthesizer sound.
-    #vco1; // Note: vco => Voltage Controlled Oscillator
-    #vco2;
-    #vca1; // Note: vca => Voltage Controlled Amplifier
-    #vca2;
     // The general volume.
     #master;
+    // Oscillator and gain elements needed to create the synthesizer sound.
+    #VCOs = {vco1: null, vco2: null};  // Note: VCO => Voltage Controlled Oscillator
+    #VCAs = {vca1: null, vca2: null};  // Note: VCA => Voltage Controlled Amplifier
 
     #setMaster(volume) {
         this.#master = this.#audioContext.createGain();
@@ -31,23 +28,39 @@ class Oscillator {
         return oscillator;
     }
 
-    /*
-     * Create a second oscillator that is played with the main oscillator.
-     * Its frequency is transposed from the main oscillator frequency.
-     */
-    #setVco2(frequency, steps) {
-        this.#vco2 = this.#getOscillator();
-        this.#vca2 = this.#audioContext.createGain();
+    #setVCO(id, frequency, parameters) {
+        // Shortcut.
+        const vco = 'vco' + id;
+        const vca = 'vca' + id;
+        parameters = parameters[vco];
 
-        // Transpose the value of the main vco by x steps.
-        this.#vco2.frequency.value = frequency * Math.pow(2, steps / 12);
-        this.#vco2.connect(this.#vca2);
-        this.#vca2.connect(this.#vca1);
-    }
+        this.#VCOs[vco] = this.#getOscillator(frequency);
+        this.#VCOs[vco].type = parameters.type;
+        this.#VCAs[vca] = this.#audioContext.createGain();
 
-    #setVco1(frequency, parameters) {
-        this.#vco1 = this.#getOscillator(frequency);
-        this.#vco1.type = parameters.vco1.type;
+        if (id == '2') {
+            // Transpose the value of the main VCO (ie: vco a) by x steps.
+            this.#VCOs.vco2.frequency.value = frequency * Math.pow(2, parameters.detune / 12);
+        }
+
+        this.#VCOs[vco].connect(this.#VCAs[vca]);
+      console.log(this.#VCOs);
+      console.log(parameters);
+
+        if (parameters.attack > 0) {
+            // Start from volume zero.
+            this.#VCAs[vca].gain.setValueAtTime(0, this.#audioContext.currentTime);
+        }
+        else {
+            this.#VCAs[vca].gain.value = parseFloat(parameters.volume);
+        }
+
+        this.#VCAs[vca].connect(this.#master);
+
+        // Attack
+        this.#VCAs[vca].gain.linearRampToValueAtTime(parseFloat(parameters.volume), this.#audioContext.currentTime + parseFloat(parameters.attack));
+        // Decay
+        this.#VCAs[vca].gain.linearRampToValueAtTime(parseFloat(parameters.sustain), this.#audioContext.currentTime + parseFloat(parameters.attack) + parseFloat(parameters.decay));
     }
 
     /*
@@ -62,7 +75,7 @@ class Oscillator {
         feedback.connect(delay);
 
         delay.connect(feedback);
-        this.#vca1.connect(delay);
+        this.#VCAs.vca1.connect(delay);
         delay.connect(this.#master);
     }
 
@@ -72,51 +85,30 @@ class Oscillator {
 
     play(frequency, parameters) {
         this.#setMaster(parameters.volume);
-        this.#setVco1(frequency, parameters);
-        this.#vca1 = this.#audioContext.createGain();
-        //this.#vca1.gain.value = parseFloat(parameters.vco1.volume);
-        this.#vco1.connect(this.#vca1);
-
-        if (parameters.vco1.attack > 0) {
-            // Start from volume zero.
-            this.#vca1.gain.setValueAtTime(0, this.#audioContext.currentTime);
-        }
-        else {
-            this.#vca1.gain.value = parseFloat(parameters.vco1.volume);
-        }
-
-        this.#vca1.connect(this.#master);
+        this.#setVCO('1', frequency, parameters);
 
         // Check for VCO 2.
-        if (parameters.vco2) {
-            this.#setVco2(frequency, parameters.steps);
+        if (parameters.vco2.volume > 0) {
+            this.#setVCO('2', frequency, parameters);
         }
-
-        // Attack
-        this.#vca1.gain.linearRampToValueAtTime(parseFloat(parameters.vco1.volume), this.#audioContext.currentTime + parseFloat(parameters.vco1.attack));
-        // Decay
-        this.#vca1.gain.linearRampToValueAtTime(parseFloat(parameters.vco1.sustain), this.#audioContext.currentTime + parseFloat(parameters.vco1.attack) + parseFloat(parameters.vco1.decay));
 
         this.#delay(parameters.delay, parameters.feedback);
 
-        // Play sound.
-        this.#vco1.start();
+        // Play VCO 1 sound.
+        this.#VCOs.vco1.start();
 
-        // Stop sound after note length.
-        //this.#vco1.stop(this.#audioContext.currentTime + this.#noteLength);
-
-        if (parameters.vco2) {
-            this.#vco2.start();
-            this.#vco2.stop(this.#audioContext.currentTime + this.#noteLength);
+        if (parameters.vco2.volume > 0) {
+            // Play VCO 2 sound.
+            this.#VCOs.vco2.start();
         }
     }
 
     stop(parameters) {
-        //this.#vca1.gain.linearRampToValueAtTime(0.0001, this.#audioContext.currentTime + parseFloat(parameters.vco1.release));
-        this.#vco1.stop(this.#audioContext.currentTime + parseFloat(parameters.vco1.release));
+        // Release
+        this.#VCOs.vco1.stop(this.#audioContext.currentTime + parseFloat(parameters.vco1.release));
 
-        if (parameters.vco2) {
-            this.#vco2.stop(this.#audioContext.currentTime);
+        if (parameters.vco2.volume > 0) {
+            this.#VCOs.vco2.stop(this.#audioContext.currentTime + parseFloat(parameters.vco2.release));
         }
     }
 }

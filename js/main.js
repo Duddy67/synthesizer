@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Check for volume.
+    // Check for main volume.
     document.getElementById('volume').addEventListener('input', (e) => {
         synthesizer.setVolume(e.target.value);
     });
@@ -141,16 +141,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Check for VCO 2.
-    document.querySelectorAll('input[name="vco-2"]').forEach((vco2) => {
-        vco2.addEventListener('click', (e) => {
-            synthesizer.setVCO2(e.target.value);
+    // Check for vco detunes.
+    document.querySelectorAll('[id$="-detune"]').forEach((detune) => {
+        detune.addEventListener('input', (e) => {
+            //console.log('vco' + e.target.dataset.vcoId + ' type ' + e.target.value);
+            synthesizer.setVcoDetune('vco' + e.target.dataset.vcoId, e.target.value);
         });
-    });
-
-    // Check for the "steps" parameter used with doubled notes.
-    document.getElementById('steps').addEventListener('input', (e) => {
-        synthesizer.setSteps(e.target.value);
     });
 });
 

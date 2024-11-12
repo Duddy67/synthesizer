@@ -59,13 +59,36 @@
 
             <div class="col-3 border rounded me-2">
                 <p class="h6">VCO 2</p>
-                <label for="vco-2" class="form-check-label">On</label>
-                <input type="radio" name="vco-2" value="1" class="form-check-input me-4">
-                <label for="vco-2" class="form-check-label">Off</label>
-                <input type="radio" name="vco-2" value="0" class="form-check-input" checked><br />
+                <label for="vco-2-type" class="form-check-label">Type</label>
+                <select name="vco-2-type" class="form-select" id="vco-2-type" data-vco-id="2">
+                    <option value="sine">Sine</option>
+                    <option value="square">Square</option>
+                    <option value="sawtooth">Saw tooth</option>
+                    <option value="triangle">Triangle</option>
+                </select>
 
-                <label for="steps" class="mt-3">Steps</label>
-                <input id="steps" type="range" min="1" max="12" step="1" value="7" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
+                <label for="vco-2-volume" class="mt-3">Volume</label>
+                <input id="vco-2-volume" type="range" min="0.0" max="1.0" step="0.1" value="0.0" data-vco-id="2" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
+                <output class="d-block">0.0</output>
+
+                <label for="vco-2-attack" class="mt-3">Attack</label>
+                <input id="vco-2-attack" type="range" min="0.0" max="1.0" step="0.1" value="0.0" data-vco-id="2" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
+                <output class="d-block">0.0</output>
+
+                <label for="vco-2-decay" class="mt-3">Decay</label>
+                <input id="vco-2-decay" type="range" min="0.0" max="1.0" step="0.1" value="0.0" data-vco-id="2" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
+                <output class="d-block">0.0</output>
+
+                <label for="vco-2-sustain" class="mt-3">Sustain</label>
+                <input id="vco-2-sustain" type="range" min="0.0" max="1" step="0.1" value="0.0" data-vco-id="2" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
+                <output class="d-block">0.0</output>
+
+                <label for="vco-2-release" class="mt-3">Release</label>
+                <input id="vco-2-release" type="range" min="0.0" max="1.0" step="0.1" value="0.0" data-vco-id="2" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
+                <output class="d-block">0.0</output>
+
+                <label for="vco-2-detune" class="mt-3">Detune</label>
+                <input id="vco-2-detune" type="range" min="0" max="12" step="1" value="7" data-vco-id="2" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
                 <output class="d-block">7</output>
             </div>
 
