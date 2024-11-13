@@ -28,8 +28,11 @@ class Oscillator {
         return oscillator;
     }
 
+    /*
+     * Create a VCO with the given parameters.
+     */
     #setVCO(id, frequency, parameters) {
-        // Shortcut.
+        // Shortcuts.
         const vco = 'vco' + id;
         const vca = 'vca' + id;
         parameters = parameters[vco];
@@ -44,8 +47,6 @@ class Oscillator {
         }
 
         this.#VCOs[vco].connect(this.#VCAs[vca]);
-      console.log(this.#VCOs);
-      console.log(parameters);
 
         if (parameters.attack > 0) {
             // Start from volume zero.

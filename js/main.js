@@ -136,7 +136,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Check for vco releases.
     document.querySelectorAll('[id$="-release"]').forEach((release) => {
         release.addEventListener('input', (e) => {
-            //console.log('vco' + e.target.dataset.vcoId + ' type ' + e.target.value);
             synthesizer.setVcoRelease('vco' + e.target.dataset.vcoId, e.target.value);
         });
     });
@@ -144,7 +143,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Check for vco detunes.
     document.querySelectorAll('[id$="-detune"]').forEach((detune) => {
         detune.addEventListener('input', (e) => {
-            //console.log('vco' + e.target.dataset.vcoId + ' type ' + e.target.value);
             synthesizer.setVcoDetune('vco' + e.target.dataset.vcoId, e.target.value);
         });
     });
