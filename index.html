@@ -12,7 +12,6 @@
 
 <body>
     <div class="container">
-        <h1 class="mb-2">Synthesizer</h1>
         <div class="row">
             <div class="col-3 border rounded me-2">
                 <label for="volume">Master Volume</label>
@@ -24,6 +23,10 @@
                 <input type="radio" name="range" value="2" data-lowest-octave="3" class="form-check-input" id="range-2" checked>
                 <label for="range-3" class="form-check-label">Range 3</label>
                 <input type="radio" name="range" value="3" data-lowest-octave="4" class="form-check-input" id="range-3">
+
+                <label for="portamento" class="mt-3">Portamento</label>
+                <input id="portamento" type="range" min="0.0" max="1.0" step="0.1" value="0" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
+                <output class="d-block">0.0</output>
             </div>
 
             <div class="col-3 border rounded me-2">

@@ -1,31 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     const keyMaps = {
-        a: 'key-1',
-        z: 'key-2',
-        e: 'key-3',
-        r: 'key-4',
-        t: 'key-5',
-        y: 'key-6',
-        u: 'key-7',
-        i: 'key-8',
-        o: 'key-9',
-        p: 'key-10',
-        q: 'key-11',
-        s: 'key-12',
-        d: 'key-13',
-        f: 'key-14',
-        g: 'key-15',
-        h: 'key-16',
-        j: 'key-17',
-        k: 'key-18',
-        l: 'key-19',
-        m: 'key-20',
-        w: 'key-21',
-        x: 'key-22',
-        c: 'key-23',
-        v: 'key-24',
-        b: 'key-25'
+        a: 'key-1', z: 'key-2', e: 'key-3', r: 'key-4', t: 'key-5', y: 'key-6', u: 'key-7', i: 'key-8', o: 'key-9', p: 'key-10', q: 'key-11', s: 'key-12',
+        d: 'key-13', f: 'key-14', g: 'key-15', h: 'key-16', j: 'key-17', k: 'key-18', l: 'key-19', m: 'key-20', w: 'key-21', x: 'key-22', c: 'key-23',
+        v: 'key-24', b: 'key-25'
     };
 
     const keys = ['a', 'z', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'q', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'w', 'x', 'c', 'v', 'b'];
@@ -96,6 +74,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Check for delay feedback.
     document.getElementById('feedback').addEventListener('input', (e) => {
         synthesizer.setFeedback(e.target.value);
+    });
+
+    // Check for portamento.
+    document.getElementById('portamento').addEventListener('input', (e) => {
+        synthesizer.setPortamento(e.target.value);
     });
 
     // Check for vco types.

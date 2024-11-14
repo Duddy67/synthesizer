@@ -28,6 +28,18 @@ class Oscillator {
         return oscillator;
     }
 
+    #portamento(frequency, parameters) {
+        const now = this.#audioContext.currentTime;
+
+        this.#VCOs.vco1.frequency.cancelScheduledValues(now);
+        this.#VCOs.vco1.frequency.linearRampToValueAtTime(frequency, now + parseFloat(parameters.portamento)); 
+
+        if (parameters.vco2.volume > 0) {
+            this.#VCOs.vco2.frequency.cancelScheduledValues(now);
+            this.#VCOs.vco2.frequency.linearRampToValueAtTime(frequency, now + parseFloat(parameters.portamento)); 
+        }
+    }
+
     /*
      * Create a VCO with the given parameters.
      */
@@ -35,33 +47,41 @@ class Oscillator {
         // Shortcuts.
         const vco = 'vco' + id;
         const vca = 'vca' + id;
-        parameters = parameters[vco];
+        const vcoParams = parameters[vco];
+        const now = this.#audioContext.currentTime;
+
+        // Another note is still playing.
+        if (this.#VCOs[vco]) {
+            // Stop the note short (ie: ignore the release parameter) to make the synthesizer monophonic. 
+            this.#VCOs[vco].stop(0);
+            this.#VCOs[vco] = null;
+        }
 
         this.#VCOs[vco] = this.#getOscillator(frequency);
-        this.#VCOs[vco].type = parameters.type;
+        this.#VCOs[vco].type = vcoParams.type;
         this.#VCAs[vca] = this.#audioContext.createGain();
 
         if (id == '2') {
             // Transpose the value of the main VCO (ie: vco a) by x steps.
-            this.#VCOs.vco2.frequency.value = frequency * Math.pow(2, parameters.detune / 12);
+            this.#VCOs.vco2.frequency.value = frequency * Math.pow(2, vcoParams.detune / 12);
         }
 
         this.#VCOs[vco].connect(this.#VCAs[vca]);
 
-        if (parameters.attack > 0) {
+        if (vcoParams.attack > 0) {
             // Start from volume zero.
-            this.#VCAs[vca].gain.setValueAtTime(0, this.#audioContext.currentTime);
+            this.#VCAs[vca].gain.setValueAtTime(0, now);
         }
         else {
-            this.#VCAs[vca].gain.value = parseFloat(parameters.volume);
+            this.#VCAs[vca].gain.value = parseFloat(vcoParams.volume);
         }
 
         this.#VCAs[vca].connect(this.#master);
 
         // Attack
-        this.#VCAs[vca].gain.linearRampToValueAtTime(parseFloat(parameters.volume), this.#audioContext.currentTime + parseFloat(parameters.attack));
+        this.#VCAs[vca].gain.linearRampToValueAtTime(parseFloat(vcoParams.volume), now + parseFloat(vcoParams.attack));
         // Decay
-        this.#VCAs[vca].gain.linearRampToValueAtTime(parseFloat(parameters.sustain), this.#audioContext.currentTime + parseFloat(parameters.attack) + parseFloat(parameters.decay));
+        this.#VCAs[vca].gain.linearRampToValueAtTime(parseFloat(vcoParams.sustain), now + parseFloat(vcoParams.attack) + parseFloat(vcoParams.decay));
     }
 
     /*
@@ -86,6 +106,14 @@ class Oscillator {
 
     play(frequency, parameters) {
         this.#setMaster(parameters.volume);
+
+        // Check for portamento.
+        if (this.#VCOs.vco1 && parameters.portamento > 0) {
+            this.#portamento(frequency, parameters);
+            // Use the current oscillator, don't create a new one.
+            return;
+        }
+
         this.#setVCO('1', frequency, parameters);
 
         // Check for VCO 2.
@@ -105,11 +133,22 @@ class Oscillator {
     }
 
     stop(parameters) {
-        // Release
-        this.#VCOs.vco1.stop(this.#audioContext.currentTime + parseFloat(parameters.vco1.release));
+        const now = this.#audioContext.currentTime;
+
+        if (this.#VCOs.vco1) {
+            // Release
+            this.#VCAs.vca1.gain.linearRampToValueAtTime(0, now + parseFloat(parameters.vco1.release));
+
+            this.#VCOs.vco1.stop(now + parseFloat(parameters.vco1.release));
+            this.#VCOs.vco1 = null;
+        }
 
         if (parameters.vco2.volume > 0) {
-            this.#VCOs.vco2.stop(this.#audioContext.currentTime + parseFloat(parameters.vco2.release));
+            // Release
+            this.#VCAs.vca2.gain.linearRampToValueAtTime(0, now + parseFloat(parameters.vco2.release));
+
+            this.#VCOs.vco2.stop(now + parseFloat(parameters.vco2.release));
+            this.#VCOs.vco2 = null;
         }
     }
 }
