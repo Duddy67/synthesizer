@@ -26,10 +26,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Check for PC keyboard inputs.
 
     let released = true;
+    let keysCurrentlyPressed = [];
 
     document.addEventListener('keydown', (e) => {
         // Filter the pressed keys.
-        if (keys.includes(e.key) && released) {
+        //if (keys.includes(e.key) && released) {
+        if (keys.includes(e.key) && !keysCurrentlyPressed.includes(e.key)) {
+            keysCurrentlyPressed.push(e.key);
             // Get the corresponding HTML key element.
             const keyElement = document.getElementById(keyMaps[e.key]);
             // Get the key data from the key element.
@@ -46,11 +49,29 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keyup', (e) => {
         // Filter the pressed keys.
         if (keys.includes(e.key)) {
-            synthesizer.release();
+            // Remove the released key from the array.
+            keysCurrentlyPressed = keysCurrentlyPressed.filter(key => key !== e.key);
+
+            // Release the corresponding note only when no more key is pressed.
+            if (keysCurrentlyPressed.length == 0) {
+                synthesizer.release();
+            }
+
             // Get the corresponding HTML key element.
-            const key = document.getElementById(keyMaps[e.key]);
+            let key = document.getElementById(keyMaps[e.key]);
             key.classList.remove('pressed-' + key.dataset.color);
             released = true;
+
+            // One key is still being pressed, meaning that a note is sustained.
+            if (keysCurrentlyPressed.length == 1) {
+                // Get the corresponding key element.
+                const keyElement = document.getElementById(keyMaps[keysCurrentlyPressed[0]]);
+                // Get the corresponding note name.
+                key = keyElement.dataset.key + keyElement.dataset.octave;
+                synthesizer.setPressedKey(key);
+                // Play the sustained note.
+                synthesizer.press();
+            }
         }
     });
 
