@@ -17,7 +17,7 @@ class Synthesizer {
     #pressedKey;
     // The sound parameters.
     #parameters = {
-        volume: 0.2, delay: 0, feedback: 0, portamento: 0,
+        volume: 0.2, delay: 0, feedback: 0, portamento: 0, vco1Delay: true, vco2Delay: false,
             vco1: {
                 type: 'sine', volume: 0.5, attack: 0.0, decay: 0.0, sustain: 0.25, sustainStep: 0.5, release: 0.0
             }, 
@@ -70,6 +70,11 @@ class Synthesizer {
 
     setDelay(delay) {
         this.#parameters.delay= delay;
+    }
+
+    setVcoDelay(id, value) {
+        value = value == '1' ? true : false;
+        this.#parameters['vco' + id + 'Delay'] = value;
     }
 
     setFeedback(feedback) {

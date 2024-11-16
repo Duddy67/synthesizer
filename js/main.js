@@ -102,6 +102,20 @@ document.addEventListener('DOMContentLoaded', () => {
         synthesizer.setPortamento(e.target.value);
     });
 
+    // Check for vco 1 delay.
+    document.querySelectorAll('[id^="vco1-delay"]').forEach((vco1) => {
+        vco1.addEventListener('click', (e) => {
+            synthesizer.setVcoDelay('1', e.target.value);
+        });
+    });
+
+    // Check for vco 2 delay.
+    document.querySelectorAll('[id^="vco2-delay"]').forEach((vco2) => {
+        vco2.addEventListener('click', (e) => {
+            synthesizer.setVcoDelay('2', e.target.value);
+        });
+    });
+
     // Check for vco types.
     document.querySelectorAll('[id$="-type"]').forEach((type) => {
         type.addEventListener('change', (e) => {

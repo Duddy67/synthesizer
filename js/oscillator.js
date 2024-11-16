@@ -28,10 +28,14 @@ class Oscillator {
         return oscillator;
     }
 
+    /*
+     * Smoothly transitions the current note frequency to the given new note frequency. 
+     */
     #portamento(frequency, parameters) {
         const now = this.#audioContext.currentTime;
 
         this.#VCOs.vco1.frequency.cancelScheduledValues(now);
+        // Transition the frequency according to the glide duration (ie: portamento parameter).
         this.#VCOs.vco1.frequency.linearRampToValueAtTime(frequency, now + parseFloat(parameters.portamento)); 
 
         if (parameters.vco2.volume > 0) {
@@ -87,16 +91,24 @@ class Oscillator {
     /*
      * Add a delay effect to the sound.
      */
-    #delay(time, feedbackValue) {
+    #delay(parameters) {
         const delay =  this.#audioContext.createDelay();
-        delay.delayTime.value = time;
+        delay.delayTime.value = parseFloat(parameters.delay);
 
         const feedback = this.#audioContext.createGain();
-        feedback.gain.value = feedbackValue;
+        feedback.gain.value = parseFloat(parameters.feedback);
         feedback.connect(delay);
 
         delay.connect(feedback);
-        this.#VCAs.vca1.connect(delay);
+
+        if (parameters.vco1Delay && parameters.vco1.volume > 0) {
+            this.#VCAs.vca1.connect(delay);
+        }
+
+        if (parameters.vco2Delay && parameters.vco2.volume > 0) {
+            this.#VCAs.vca2.connect(delay);
+        }
+
         delay.connect(this.#master);
     }
 
@@ -121,7 +133,7 @@ class Oscillator {
             this.#setVCO('2', frequency, parameters);
         }
 
-        this.#delay(parameters.delay, parameters.feedback);
+        this.#delay(parameters);
 
         // Play VCO 1 sound.
         this.#VCOs.vco1.start();

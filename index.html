@@ -12,26 +12,47 @@
 
 <body>
     <div class="container">
-        <div class="row">
+        <div class="row mt-4">
             <div class="col-3 border rounded me-2">
-                <label for="volume">Master Volume</label>
+                <label for="volume" class="fw-bold mt-2">Master Volume</label>
                 <input id="volume" type="range" min="0.0" max="1.0" step="0.1" value="0.2" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
                 <output class="d-block">0.2</output>
-                <label for="range-1" class="form-check-label mt-3">Range 1</label>
+
+                <p class="mb-0 mt-2 mb-2 fw-bold">Octave</p>
+                <label for="range-1" class="form-check-label">Range 1</label>
                 <input type="radio" name="range" value="1" data-lowest-octave="2" class="form-check-input" id="range-1">
                 <label for="range-2" class="form-check-label">Range 2</label>
                 <input type="radio" name="range" value="2" data-lowest-octave="3" class="form-check-input" id="range-2" checked>
                 <label for="range-3" class="form-check-label">Range 3</label>
                 <input type="radio" name="range" value="3" data-lowest-octave="4" class="form-check-input" id="range-3">
 
-                <label for="portamento" class="mt-3">Portamento</label>
+                <label for="portamento" class="mt-3 fw-bold">Portamento</label>
                 <input id="portamento" type="range" min="0.0" max="1.0" step="0.1" value="0" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
                 <output class="d-block">0.0</output>
+
+                <label for="delay" class="fw-bold">Delay</label>
+                <input id="delay" type="range" min="0.0" max="1.0" step="0.05" value="0" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
+                <output>0</output><br />
+                <label for="feedback" class="fw-bold">Feedback</label>
+                <input id="feedback" type="range" min="0.0" max="0.8" step="0.1" value="0" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
+                <output>0</output>
+
+                <p class="mb-0 mt-2 mb-2 fw-bold">VCO 1 delay</p>
+                <label for="vco1-delay-on" class="form-check-label">on</label>
+                <input type="radio" name="vco1-delay" value="1" class="form-check-input" id="vco1-delay-on" checked>
+                <label for="vco1-delay-off" class="form-check-label">off</label>
+                <input type="radio" name="vco1-delay" value="0" class="form-check-input" id="vco1-delay-off">
+
+                <p class="mb-0 mt-2 mb-2 fw-bold">VCO 2 delay</p>
+                <label for="vco2-delay-on" class="form-check-label">on</label>
+                <input type="radio" name="vco2-delay" value="1" class="form-check-input" id="vco2-delay-on">
+                <label for="vco2-delay-off" class="form-check-label">off</label>
+                <input type="radio" name="vco2-delay" value="0" class="form-check-input" id="vco2-delay-off" checked>
             </div>
 
             <div class="col-3 border rounded me-2">
-                <p class="h6">VCO 1</p>
-                <label for="vco-1-type" class="form-check-label">Type</label>
+                <p class="h6 fw-bold mt-2">VCO 1</p>
+                <label for="vco-1-type" class="form-check-label fw-bold">Type</label>
                 <select name="vco-1-type" class="form-select" id="vco-1-type" data-vco-id="1">
                     <option value="sine">Sine</option>
                     <option value="square">Square</option>
@@ -39,30 +60,30 @@
                     <option value="triangle">Triangle</option>
                 </select>
 
-                <label for="vco-1-volume" class="mt-3">Volume</label>
+                <label for="vco-1-volume" class="mt-3 fw-bold">Volume</label>
                 <input id="vco-1-volume" type="range" min="0.0" max="1.0" step="0.1" value="0.5" data-vco-id="1" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
                 <output class="d-block">0.5</output>
 
-                <label for="vco-1-attack" class="mt-3">Attack</label>
+                <label for="vco-1-attack" class="mt-3 fw-bold">Attack</label>
                 <input id="vco-1-attack" type="range" min="0.0" max="1.0" step="0.1" value="0.0" data-vco-id="1" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
                 <output class="d-block">0.0</output>
 
-                <label for="vco-1-decay" class="mt-3">Decay</label>
+                <label for="vco-1-decay" class="mt-3 fw-bold">Decay</label>
                 <input id="vco-1-decay" type="range" min="0.0" max="1.0" step="0.1" value="0.0" data-vco-id="1" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
                 <output class="d-block">0.0</output>
 
-                <label for="vco-1-sustain" class="mt-3">Sustain</label>
+                <label for="vco-1-sustain" class="mt-3 fw-bold">Sustain</label>
                 <input id="vco-1-sustain" type="range" min="0.0" max="1" step="0.1" value="0.5" data-vco-id="1" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
                 <output class="d-block">0.5</output>
 
-                <label for="vco-1-release" class="mt-3">Release</label>
+                <label for="vco-1-release" class="mt-3 fw-bold">Release</label>
                 <input id="vco-1-release" type="range" min="0.0" max="1.0" step="0.1" value="0.0" data-vco-id="1" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
                 <output class="d-block">0.0</output>
             </div>
 
             <div class="col-3 border rounded me-2">
-                <p class="h6">VCO 2</p>
-                <label for="vco-2-type" class="form-check-label">Type</label>
+                <p class="h6 fw-bold mt-2">VCO 2</p>
+                <label for="vco-2-type" class="form-check-label fw-bold">Type</label>
                 <select name="vco-2-type" class="form-select" id="vco-2-type" data-vco-id="2">
                     <option value="sine">Sine</option>
                     <option value="square">Square</option>
@@ -70,38 +91,29 @@
                     <option value="triangle">Triangle</option>
                 </select>
 
-                <label for="vco-2-volume" class="mt-3">Volume</label>
+                <label for="vco-2-volume" class="mt-3 fw-bold">Volume</label>
                 <input id="vco-2-volume" type="range" min="0.0" max="1.0" step="0.1" value="0.0" data-vco-id="2" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
                 <output class="d-block">0.0</output>
 
-                <label for="vco-2-attack" class="mt-3">Attack</label>
+                <label for="vco-2-attack" class="mt-3 fw-bold">Attack</label>
                 <input id="vco-2-attack" type="range" min="0.0" max="1.0" step="0.1" value="0.0" data-vco-id="2" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
                 <output class="d-block">0.0</output>
 
-                <label for="vco-2-decay" class="mt-3">Decay</label>
+                <label for="vco-2-decay" class="mt-3 fw-bold">Decay</label>
                 <input id="vco-2-decay" type="range" min="0.0" max="1.0" step="0.1" value="0.0" data-vco-id="2" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
                 <output class="d-block">0.0</output>
 
-                <label for="vco-2-sustain" class="mt-3">Sustain</label>
+                <label for="vco-2-sustain" class="mt-3 fw-bold">Sustain</label>
                 <input id="vco-2-sustain" type="range" min="0.0" max="1" step="0.1" value="0.0" data-vco-id="2" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
                 <output class="d-block">0.0</output>
 
-                <label for="vco-2-release" class="mt-3">Release</label>
+                <label for="vco-2-release" class="mt-3 fw-bold">Release</label>
                 <input id="vco-2-release" type="range" min="0.0" max="1.0" step="0.1" value="0.0" data-vco-id="2" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
                 <output class="d-block">0.0</output>
 
-                <label for="vco-2-detune" class="mt-3">Detune</label>
+                <label for="vco-2-detune" class="mt-3 fw-bold">Detune</label>
                 <input id="vco-2-detune" type="range" min="0" max="12" step="1" value="7" data-vco-id="2" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
                 <output class="d-block">7</output>
-            </div>
-
-            <div class="col-2 border rounded me-2">
-                <label for="delay">Delay</label>
-                <input id="delay" type="range" min="0.0" max="1.0" step="0.1" value="0" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
-                <output>0</output><br />
-                <label for="feedback">Feedback</label>
-                <input id="feedback" type="range" min="0.0" max="1.0" step="0.1" value="0" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
-                <output>0</output>
             </div>
 
             <div class="col-12 d-flex justify-content-center mt-4">
