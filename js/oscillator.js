@@ -9,6 +9,7 @@ class Oscillator {
     // Oscillator and gain elements needed to create the synthesizer sound.
     #VCOs = {vco1: null, vco2: null};  // Note: VCO => Voltage Controlled Oscillator
     #VCAs = {vca1: null, vca2: null};  // Note: VCA => Voltage Controlled Amplifier
+    // The LFO used to create a vibrato effect.
     #LFO;
 
     #setMaster(volume) {
@@ -89,30 +90,33 @@ class Oscillator {
         this.#VCAs[vca].gain.linearRampToValueAtTime(parseFloat(vcoParams.sustain), now + parseFloat(vcoParams.attack) + parseFloat(vcoParams.decay));
     }
 
-    #setLFO(parameters) {
+    /*
+     * Creates a vibrato effect through a LFO oscillator.
+     */
+    #vibrato(parameters) {
         this.#LFO =  this.#audioContext.createOscillator();
         const LFOGain = this.#audioContext.createGain();
 
-        this.#LFO.frequency.setValueAtTime(parameters.lfo.speed, 0);
+        this.#LFO.frequency.setValueAtTime(parameters.vibrato.speed, 0);
         this.#LFO.connect(LFOGain);
-        LFOGain.gain.value = parameters.lfo.amount;
+        LFOGain.gain.value = parameters.vibrato.amount;
         // Needed for the attack parameter.
         LFOGain.gain.setValueAtTime(0, this.#audioContext.currentTime);
 
-        if (parameters.lfo.vco1 && parameters.vco1.volume > 0) {
+        if (parameters.vibrato.vco1 && parameters.vco1.volume > 0) {
             LFOGain.connect(this.#VCOs.vco1.frequency);
         }
 
-        if (parameters.lfo.vco2 && parameters.vco2.volume > 0) {
+        if (parameters.vibrato.vco2 && parameters.vco2.volume > 0) {
             LFOGain.connect(this.#VCOs.vco2.frequency);
         }
 
         // LFO attack
-        LFOGain.gain.linearRampToValueAtTime(parameters.lfo.amount, this.#audioContext.currentTime + parseFloat(parameters.lfo.attack));
+        LFOGain.gain.linearRampToValueAtTime(parameters.vibrato.amount, this.#audioContext.currentTime + parseFloat(parameters.vibrato.attack));
     }
 
     /*
-     * Add a delay effect to the sound.
+     * Adds a delay effect to the sound.
      */
     #delay(parameters) {
         const delay =  this.#audioContext.createDelay();
@@ -156,14 +160,14 @@ class Oscillator {
             this.#setVCO('2', frequency, parameters);
         }
 
-        this.#setLFO(parameters);
+        this.#vibrato(parameters);
 
         this.#delay(parameters);
 
         // Play VCO 1 sound.
         this.#VCOs.vco1.start();
-        // Starts also the LFO oscillator and add the delay value if any.
-        this.#LFO.start(this.#audioContext.currentTime + parseFloat(parameters.lfo.delay));
+        // Starts also the LFO oscillator (vibrato) and add the delay value if any.
+        this.#LFO.start(this.#audioContext.currentTime + parseFloat(parameters.vibrato.delay));
 
         // Check for VCO 2
         if (parameters.vco2.volume > 0) {

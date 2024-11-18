@@ -88,13 +88,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Check for delay.
-    document.getElementById('delay').addEventListener('input', (e) => {
-        synthesizer.setDelay(e.target.value);
-    });
-
-    // Check for delay feedback.
-    document.getElementById('feedback').addEventListener('input', (e) => {
-        synthesizer.setFeedback(e.target.value);
+    document.querySelectorAll('[id^="delay-"]').forEach((delay) => {
+        delay.addEventListener('input', (e) => {
+            synthesizer.setDelay(e.target.dataset.parameter, e.target.value);
+        });
     });
 
     // Check for portamento.
@@ -119,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Check for vibrato.
     document.querySelectorAll('[id^="vibrato-"]').forEach((vibrato) => {
         vibrato.addEventListener('input', (e) => {
-            synthesizer.setLFO(e.target.dataset.parameter, e.target.value);
+            synthesizer.setVibrato(e.target.dataset.parameter, e.target.value);
         });
     });
 

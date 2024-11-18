@@ -18,7 +18,7 @@ class Synthesizer {
     // The sound parameters.
     #parameters = {
         volume: 0.2, portamento: 0,
-            lfo: {
+            vibrato: {
                 speed: 5, amount: 0, attack: 0, delay: 0, vco1: true, vco2: false
             },
             delay: {
@@ -74,12 +74,12 @@ class Synthesizer {
         this.#parameters.volume = volume;
     }
 
-    setDelay(time) {
-        this.#parameters.delay.time = time;
-    }
+    setDelay(parameter, value) {
+        if (parameter.startsWith('vco')) {
+            value = value == '1' ? true : false;
+        }
 
-    setFeedback(feedback) {
-        this.#parameters.delay.feedback = feedback;
+        this.#parameters.delay[parameter] = value;
     }
 
     setVcoDelay(id, value) {
@@ -87,12 +87,12 @@ class Synthesizer {
         this.#parameters.delay['vco' + id] = value;
     }
 
-    setLFO(parameter, value) {
+    setVibrato(parameter, value) {
         if (parameter.startsWith('vco')) {
             value = value == '1' ? true : false;
         }
 
-        this.#parameters.lfo[parameter] = value;
+        this.#parameters.vibrato[parameter] = value;
     }
 
     setPortamento(portamento) {
