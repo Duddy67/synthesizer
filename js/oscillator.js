@@ -9,6 +9,7 @@ class Oscillator {
     // Oscillator and gain elements needed to create the synthesizer sound.
     #VCOs = {vco1: null, vco2: null};  // Note: VCO => Voltage Controlled Oscillator
     #VCAs = {vca1: null, vca2: null};  // Note: VCA => Voltage Controlled Amplifier
+    #LFO;
 
     #setMaster(volume) {
         this.#master = this.#audioContext.createGain();
@@ -88,24 +89,46 @@ class Oscillator {
         this.#VCAs[vca].gain.linearRampToValueAtTime(parseFloat(vcoParams.sustain), now + parseFloat(vcoParams.attack) + parseFloat(vcoParams.decay));
     }
 
+    #setLFO(parameters) {
+        this.#LFO =  this.#audioContext.createOscillator();
+        const LFOGain = this.#audioContext.createGain();
+
+        this.#LFO.frequency.setValueAtTime(parameters.lfo.speed, 0);
+        this.#LFO.connect(LFOGain);
+        LFOGain.gain.value = parameters.lfo.amount;
+        // Needed for the attack parameter.
+        LFOGain.gain.setValueAtTime(0, this.#audioContext.currentTime);
+
+        if (parameters.lfo.vco1 && parameters.vco1.volume > 0) {
+            LFOGain.connect(this.#VCOs.vco1.frequency);
+        }
+
+        if (parameters.lfo.vco2 && parameters.vco2.volume > 0) {
+            LFOGain.connect(this.#VCOs.vco2.frequency);
+        }
+
+        // LFO attack
+        LFOGain.gain.linearRampToValueAtTime(parameters.lfo.amount, this.#audioContext.currentTime + parseFloat(parameters.lfo.attack));
+    }
+
     /*
      * Add a delay effect to the sound.
      */
     #delay(parameters) {
         const delay =  this.#audioContext.createDelay();
-        delay.delayTime.value = parseFloat(parameters.delay);
+        delay.delayTime.value = parseFloat(parameters.delay.time);
 
         const feedback = this.#audioContext.createGain();
-        feedback.gain.value = parseFloat(parameters.feedback);
+        feedback.gain.value = parseFloat(parameters.delay.feedback);
         feedback.connect(delay);
 
         delay.connect(feedback);
 
-        if (parameters.vco1Delay && parameters.vco1.volume > 0) {
+        if (parameters.delay.vco1 && parameters.vco1.volume > 0) {
             this.#VCAs.vca1.connect(delay);
         }
 
-        if (parameters.vco2Delay && parameters.vco2.volume > 0) {
+        if (parameters.delay.vco2 && parameters.vco2.volume > 0) {
             this.#VCAs.vca2.connect(delay);
         }
 
@@ -133,11 +156,16 @@ class Oscillator {
             this.#setVCO('2', frequency, parameters);
         }
 
+        this.#setLFO(parameters);
+
         this.#delay(parameters);
 
         // Play VCO 1 sound.
         this.#VCOs.vco1.start();
+        // Starts also the LFO oscillator and add the delay value if any.
+        this.#LFO.start(this.#audioContext.currentTime + parseFloat(parameters.lfo.delay));
 
+        // Check for VCO 2
         if (parameters.vco2.volume > 0) {
             // Play VCO 2 sound.
             this.#VCOs.vco2.start();
@@ -153,6 +181,7 @@ class Oscillator {
 
             this.#VCOs.vco1.stop(now + parseFloat(parameters.vco1.release));
             this.#VCOs.vco1 = null;
+            this.#LFO.stop(now + parseFloat(parameters.vco1.release));
         }
 
         if (parameters.vco2.volume > 0) {

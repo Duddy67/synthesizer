@@ -116,6 +116,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Check for vibrato.
+    document.querySelectorAll('[id^="vibrato-"]').forEach((vibrato) => {
+        vibrato.addEventListener('input', (e) => {
+            synthesizer.setLFO(e.target.dataset.parameter, e.target.value);
+        });
+    });
+
     // Check for vco types.
     document.querySelectorAll('[id$="-type"]').forEach((type) => {
         type.addEventListener('change', (e) => {
@@ -132,6 +139,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Check for vco attacks.
     document.querySelectorAll('[id$="-attack"]').forEach((attack) => {
+        // Don't treat the vibrato attack.
+        if (attack.id.startsWith('vibrato')) {
+            return;
+        }
+
         attack.addEventListener('input', (e) => {
             synthesizer.setVcoAttack('vco' + e.target.dataset.vcoId, e.target.value);
         });

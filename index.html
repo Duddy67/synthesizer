@@ -30,24 +30,82 @@
                 <input id="portamento" type="range" min="0.0" max="1.0" step="0.1" value="0" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
                 <output class="d-block">0.0</output>
 
-                <label for="delay" class="fw-bold">Delay</label>
-                <input id="delay" type="range" min="0.0" max="1.0" step="0.05" value="0" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
-                <output>0</output><br />
-                <label for="feedback" class="fw-bold">Feedback</label>
-                <input id="feedback" type="range" min="0.0" max="0.8" step="0.1" value="0" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
-                <output>0</output>
+                <div class="row">
+                    <div class="col-6">
+                        <label for="delay" class="fw-bold">Delay</label>
+                        <input id="delay" type="range" min="0.0" max="1.0" step="0.05" value="0" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
+                        <output>0</output>
+                    </div>
 
-                <p class="mb-0 mt-2 mb-2 fw-bold">VCO 1 delay</p>
-                <label for="vco1-delay-on" class="form-check-label">on</label>
-                <input type="radio" name="vco1-delay" value="1" class="form-check-input" id="vco1-delay-on" checked>
-                <label for="vco1-delay-off" class="form-check-label">off</label>
-                <input type="radio" name="vco1-delay" value="0" class="form-check-input" id="vco1-delay-off">
+                    <div class="col-6">
+                        <label for="feedback" class="fw-bold">Feedback</label>
+                        <input id="feedback" type="range" min="0.0" max="0.8" step="0.1" value="0" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
+                        <output>0</output>
+                    </div>
+                </div>
 
-                <p class="mb-0 mt-2 mb-2 fw-bold">VCO 2 delay</p>
-                <label for="vco2-delay-on" class="form-check-label">on</label>
-                <input type="radio" name="vco2-delay" value="1" class="form-check-input" id="vco2-delay-on">
-                <label for="vco2-delay-off" class="form-check-label">off</label>
-                <input type="radio" name="vco2-delay" value="0" class="form-check-input" id="vco2-delay-off" checked>
+                <div class="row">
+                    <div class="col-6">
+                        <p class="mb-0 mt-2 mb-2 fw-bold">VCO 1 delay</p>
+                        <label for="vco1-delay-on" class="form-check-label">on</label>
+                        <input type="radio" name="vco1-delay" value="1" class="form-check-input" id="vco1-delay-on" checked>
+                        <label for="vco1-delay-off" class="form-check-label">off</label>
+                        <input type="radio" name="vco1-delay" value="0" class="form-check-input" id="vco1-delay-off">
+                    </div>
+
+                    <div class="col-6">
+                        <p class="mb-0 mt-2 mb-2 fw-bold">VCO 2 delay</p>
+                        <label for="vco2-delay-on" class="form-check-label">on</label>
+                        <input type="radio" name="vco2-delay" value="1" class="form-check-input" id="vco2-delay-on">
+                        <label for="vco2-delay-off" class="form-check-label">off</label>
+                        <input type="radio" name="vco2-delay" value="0" class="form-check-input" id="vco2-delay-off" checked>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                        <p class="fw-bold">LFO Vibrato</p>
+                    <div class="col-6">
+                        <label for="vibrato-speed" class="fw-bold">Speed</label>
+                        <input type="range" id="vibrato-speed" min="0.5" max="10" step="0.1" value="5" data-parameter="speed" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
+                        <output>5</output>
+                    </div>
+
+                    <div class="col-6">
+                        <label for="vibrato-amount" class="fw-bold">Amount</label>
+                        <input type="range" id="vibrato-amount" min="0" max="100" step="1" value="0" data-parameter="amount" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
+                        <output>0</output>
+                    </div>
+
+                    <div class="col-6">
+                        <label for="vibrato-attack" class="fw-bold">Attack</label>
+                        <input id="vibrato-attack" type="range" min="0.0" max="1.0" step="0.1" value="0.0" data-parameter="attack" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
+                        <output class="d-block">0.0</output>
+                    </div>
+
+                    <div class="col-6">
+                        <label for="vibrato-delay" class="fw-bold">Delay</label>
+                        <input id="vibrato-delay" type="range" min="0.0" max="1.0" step="0.05" value="0" data-parameter="delay" style="height: 20px; width: 100%" oninput="this.nextElementSibling.value = this.value;">
+                        <output>0</output>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6">
+                        <p class="mb-0 mt-2 mb-2 fw-bold">VCO 1 vibrato</p>
+                        <label for="vibrato-vco1-on" class="form-check-label">on</label>
+                        <input type="radio" name="vibrato-vco1" value="1" class="form-check-input" data-parameter="vco1" id="vibrato-vco1-on" checked>
+                        <label for="vibrato-vco1-off" class="form-check-label">off</label>
+                        <input type="radio" name="vibrato-vco1" value="0" class="form-check-input" data-parameter="vco1" id="vibrato-vco1-off">
+                    </div>
+
+                    <div class="col-6">
+                        <p class="mb-0 mt-2 mb-2 fw-bold">VCO 2 vibrato</p>
+                        <label for="vibrato-vco2-on" class="form-check-label">on</label>
+                        <input type="radio" name="vibrato-vco2" value="1" class="form-check-input" data-parameter="vco2" id="vibrato-vco2-on">
+                        <label for="vibrato-vco2-off" class="form-check-label">off</label>
+                        <input type="radio" name="vibrato-vco2" value="0" class="form-check-input" data-parameter="vco2" id="vibrato-vco2-off" checked>
+                    </div>
+                </div>
             </div>
 
             <div class="col-3 border rounded me-2">
