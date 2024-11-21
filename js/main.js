@@ -10,6 +10,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const oscillator = new Oscillator();
     const synthesizer = new Synthesizer(oscillator);
+    const midi = new MIDI();
+
+    midi.initMIDIAccess();
 
     // Check for synthesizer keys.
     document.querySelectorAll('.key').forEach((key) => {
