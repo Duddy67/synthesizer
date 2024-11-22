@@ -1,8 +1,6 @@
 
 class MIDI {
     #midiAccess = null;
-    #inputs = null;
-    #outputs = null;
 
     /*
      * In case of success, a MIDIAccess object is passed as parameter.
@@ -13,16 +11,18 @@ class MIDI {
         this.#midiAccess = midiAccess;
 
         console.log(midiAccess);
-
-        this.#inputs = this.#midiAccess.inputs;
-        this.#outputs = this.#midiAccess.outputs;
         
         this.#listInputsAndOutputs();
 
-
+        // Loop through the inputs and assign the onmidimessage listener.
         for (var input of this.#midiAccess.inputs.values()) {
-            input.onmidimessage = this.getMIDIMessage;
+            // Add an onmidimessage listener to each input.
+            // The sendMIDIMessage callback will be triggered whenever a message 
+            // is sent by the input device.
+            input.onmidimessage = this.#sendMIDIMessage;
         }
+
+        //this.sendMiddleC(); // Test output sendings.
 
         return true;
     }
@@ -54,6 +54,19 @@ class MIDI {
         }
     }
 
+    /*
+     * Sends the MIDI messages coming from the inputs through a 'midi' custom event.
+     */
+    #sendMIDIMessage(message) {
+        const event = new CustomEvent('midi', {
+            detail: {
+                data: message
+            }
+        });
+
+        document.dispatchEvent(event);
+    }
+
     initMIDIAccess() {
         // Check first if the browser supports WebMIDI.
         if (navigator.requestMIDIAccess) {
@@ -70,11 +83,10 @@ class MIDI {
         navigator.requestMIDIAccess().then(this.#onMIDISuccess, this.#onMIDIFailure);
     }
 
-    getMIDIMessage(message) {
-        console.log(message);
-        var command = message.data[0];
-        var note = message.data[1];
-        // A velocity value might not be included with a noteOff command.
-        var velocity = (message.data.length > 2) ? message.data[2] : 0; 
+    sendMiddleC() {
+        const noteOnMessage = [0x90, 60, 0x7f]; // note on middle C, full velocity
+        const output = this.#midiAccess.outputs.get('E301055157E03DFE4ECD25B1A2DE57A770969181826BB42202A95305D0D32298');
+        output.send(noteOnMessage); //omitting the timestamp means send immediately.
+        output.send([0x80, 60, 0x40], window.performance.now() + 1000.0); // timestamp = now + 1000ms.
     }
 }
