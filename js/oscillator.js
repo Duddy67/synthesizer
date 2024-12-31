@@ -25,7 +25,7 @@ class Oscillator {
         frequency = frequency !== undefined ? frequency : 440.0;
         // Create an oscillator.
         const oscillator = this.#audioContext.createOscillator();
-        oscillator.frequency.value = frequency;
+        oscillator.frequency.value = parseFloat(frequency);
 
         return oscillator;
     }
@@ -139,12 +139,15 @@ class Oscillator {
         delay.connect(this.#master);
     }
 
-    setAudioContext(audioContext) {
+    setAudioContext(audioContext, parameters) {
         this.#audioContext = audioContext;
+
+        // Now the audio context is available.
+
+        this.#setMaster(parameters.volume);
     }
 
     play(frequency, parameters) {
-        this.#setMaster(parameters.volume);
 
         // Check for portamento.
         if (this.#VCOs.vco1 && parameters.portamento > 0) {
@@ -195,5 +198,13 @@ class Oscillator {
             this.#VCOs.vco2.stop(now + parseFloat(parameters.vco2.release));
             this.#VCOs.vco2 = null;
         }
+    }
+
+    setVolume(volume) {
+        this.#master.gain.value = volume;
+    }
+
+    setVcoVolume(id, volume) {
+        this.#VCAs['vca' + id].gain.value = parseFloat(volume);
     }
 }

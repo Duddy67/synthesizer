@@ -184,6 +184,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // TODO: Find the best way to handle MIDI message. 
+
+    let pianoKeysCurrentlyPressed = [];
+
     // Get and dispatch MIDI messages sent from the MIDI class.
     document.addEventListener('midi', (e) => {
         const message = e.detail.data
@@ -191,12 +195,26 @@ document.addEventListener('DOMContentLoaded', () => {
         const note = message.data[1]; // Note as number (0 - 127).
         // A velocity value might not be included with a noteOff command.
         const velocity = (message.data.length > 2) ? message.data[2] : 0; 
+    console.log('command: ' + command);
+        if (command == 144) {
+            synthesizer.setPressedKey(midiMap[note]);
+            synthesizer.press();
+            pianoKeysCurrentlyPressed.push(note);
 
-        switch (command) {
+        }
+        else if (command == 128) {
+            synthesizer.release();
+        }
+        // Pitch bend
+        else if (command == 224) {
+
+        }
+
+        /*switch (command) {
             case 144: // noteOn
                 if (velocity > 0) {
                     //noteOn(note, velocity);
-    console.log('note: ' + midiMap[note] + ' velocity: ' + velocity);
+    //console.log('note: ' + midiMap[note] + ' velocity: ' + velocity);
             synthesizer.setPressedKey(midiMap[note]);
             synthesizer.press();
                 }
@@ -208,11 +226,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             case 128: // noteOff
                 //noteOff(note);
-    console.log('note: ' + note);
+    //console.log('note: ' + note);
             synthesizer.release();
                 break;
             // we could easily expand this switch statement to cover other types of commands such as controllers or sysex
-        }
+        }*/
     });
 });
 

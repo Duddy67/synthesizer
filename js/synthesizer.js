@@ -42,7 +42,8 @@ class Synthesizer {
         // Create an audio context if it doesn't exist.
         if (!this.#audioContext) {
             this.#audioContext = new AudioContext();
-            this.#oscillator.setAudioContext(this.#audioContext);
+            // 
+            this.#oscillator.setAudioContext(this.#audioContext, this.#parameters);
         }
 
         // iOS devices lock the audio context for sake of security.
@@ -72,6 +73,7 @@ class Synthesizer {
 
     setVolume(volume) {
         this.#parameters.volume = volume;
+        this.#oscillator.setVolume(volume);
     }
 
     setDelay(parameter, value) {
@@ -108,6 +110,8 @@ class Synthesizer {
         this.#parameters[vco].sustain = volume / (this.#maxSustainVolume / this.#parameters[vco].sustainStep);
         // Set the new volume value.
         this.#parameters[vco].volume = volume;
+
+        //this.#oscillator.setVcoVolume(1, volume);
     }
 
     setVcoAttack(vco, attack) {

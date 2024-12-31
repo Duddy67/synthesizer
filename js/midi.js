@@ -85,7 +85,7 @@ class MIDI {
 
     sendMiddleC() {
         const noteOnMessage = [0x90, 60, 0x7f]; // note on middle C, full velocity
-        const output = this.#midiAccess.outputs.get('E301055157E03DFE4ECD25B1A2DE57A770969181826BB42202A95305D0D32298');
+        const output = this.#midiAccess.outputs.get('034951173EF44B9386743FE31859A74610CCC6AC0BBB2378FB3715F4C79DE3D1');
         output.send(noteOnMessage); //omitting the timestamp means send immediately.
         output.send([0x80, 60, 0x40], window.performance.now() + 1000.0); // timestamp = now + 1000ms.
     }
